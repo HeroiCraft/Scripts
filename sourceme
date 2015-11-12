@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Options
+export no_window=true
+
+# Functions
+function bgsc { # Start screen session in background if it doesn't exist
+if screen -list | awk '{print $1}' | grep -q "$1$"; then
+  echo "screen $1 already exists"
+else
+  screen -d -m -S $1
+fi
+}
+export -f bgsc
+
+# Variables
+export serverList="bungee hub survival creative games skyblock"
+export HeroiCraftDIR="$HOME/HeroiCraft" && export mainDir="$HeroiCraftDIR" # Scripts use both
+export mcVer="1.8.8"
+
+source $HeroiCraftDIR/scripts/private/privateSrc # Store passwords, etc in here to be ignored by git

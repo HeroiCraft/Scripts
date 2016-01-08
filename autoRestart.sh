@@ -17,6 +17,7 @@ else
   newRunsLeft="$(expr $runsLeft - 1)"
   echo "$newRunsLeft" > $HeroiCraftDIR/BuildTools/runsLeft.txt
   echo "There are $newRunsLeft runs until the next build of spigot"
+  $HeroiCraftDIR/updateall.sh -n
 fi
 }
 

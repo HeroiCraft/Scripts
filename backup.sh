@@ -13,6 +13,8 @@ function backup {
 
   echo "Backing up PEX Database"
   mysqldump -ubackupScript -p$bakPassword -C pex > $bakOut/pex.sql
+  mysqldump -ubackupScript -p$bakPassword -C mc_geSuit > $bakOut/geSuit.sql
+  mysqldump -ubackupScript -p$bakPassword -C mc_prism > $bakOut/prism.sql
   echo "Starting server backup"
   for serverName in $bakDirs
   do

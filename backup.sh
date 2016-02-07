@@ -51,15 +51,28 @@ function remOld {
   fi
 }
 
+function netSync {
+  echo "Syncing backups to network NAS"
+  rsync -azP ~/backups/ rsync://10.0.1.115/array1_backups/HCBackup
+  if [[ "$?" != 0 ]]; then
+    echo "Sync failed, NAS down?"
+  else 
+    echo "Sync Complete!"
+  fi
+}
+
 function main {
   cd $HeroiCraftDIR
   if [ "$1" = backup ]; then
     backup
   elif [ "$1" = delete ]; then
     remOld
+  elif [ "$1" = sync ]; then
+    netsync
   else
     backup
     remOld
+    netSync
     exit
   fi
 }

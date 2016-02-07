@@ -4,6 +4,7 @@ rev="$mcVer"
 noCopy="false"
 
 function move {
+if [[ "$noCopy" == "false" ]]; then
   for serverName in $serverList
   do
     if [[ "$serverName" != "bungee" ]]; then
@@ -11,6 +12,7 @@ function move {
      cp -fv spigot-*.jar "$HeroiCraftDIR/$serverName/spigot.jar"
    fi
  done
+fi
 }
 
 function main {
@@ -27,6 +29,7 @@ echo "Building for version $OPTARG"
 ;;
 esac
 done
+cd $mainDir/BuildTools
 rm spigot-*.jar
 trap control_c SIGINT
 java -jar BuildTools.jar --rev "$rev"

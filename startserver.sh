@@ -23,22 +23,21 @@ function restart {
 function startServer {
 	if [ "$serverName" == bungee ]; then
 		xtitle "Minecraft Server: BungeeCord"
-		cd $HeroiCraftDIR/$serverName/
+		cd "$HeroiCraftDIR/$serverName/"
     rm plugins/CommandSync/data.txt
 		echo "Starting $servernerName"
-		java -jar BungeeCord.jar
+		java -jar BungeeCord.jar -Xmx"$mcRam"G
 		echo
 		restart
 	else
 		xtitle "Minecraft Server: $serverName"
-		cd $HeroiCraftDIR/$serverName/
+		cd "$HeroiCraftDIR/$serverName/"
     rm plugins/CommandSync/data.txt
 		rm plugins/CraftBukkitUpToDate/CraftBukkitUpToDate.sav
 		echo "Starting $serverName..."
 		echo
-		java -server -Xmx1G \
-      -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:G1HeapRegionSize=4M -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+AggressiveOpts \
-		-Djava.net.preferIPv4Stack=true \
+		java -server -Xmx"$mcRam"G \
+      -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSIncrementalMode -XX:+CMSIncrementalPacing -XX:+CMSParallelRemarkEnabled -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+AggressiveOpts -XX:+UseFastAccessorMethods -XX:+UseBiasedLocking -XX:TargetSurvivorRatio=90 -Djava.net.preferIPv4Stack=true \
 		-jar spigot.jar --log-strip-color
 		echo
 		restart
@@ -46,3 +45,5 @@ function startServer {
 }
 
 startServer $serverName
+
+# Old Args: #  -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:G1HeapRegionSize=4M -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:InitiatingHeapOccupancyPercent=10 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+AggressiveOpts \

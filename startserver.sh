@@ -26,7 +26,7 @@ function startServer {
 		cd "$HeroiCraftDIR/$serverName/"
     rm plugins/CommandSync/data.txt
 		echo "Starting $servernerName"
-		java -jar BungeeCord.jar -Xmx"$mcRam"G
+		java -jar BungeeCord.jar -Xmx1G
 		echo
 		restart
 	else

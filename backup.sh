@@ -11,13 +11,14 @@ function backup {
   sleep 2s
   mkdir -p "$bakOut"
 
-  echo "Backing up PEX Database"
+  echo "Backing up MySQL Databases"
   mysqldump -ubackupScript -p$bakPassword -C pex > $bakOut/pex.sql
   mysqldump -ubackupScript -p$bakPassword -C mc_geSuit > $bakOut/geSuit.sql
   mysqldump -ubackupScript -p$bakPassword -C mc_prism > $bakOut/prism.sql
   echo "Starting server backup"
   for serverName in $bakDirs
   do
+    echo "Backing up $serverName"
     if [ "$serverName" != bungee ]; then
       if screen -list | grep -q "mc_$serverName"; then
         screen -S mc_$serverName -X stuff "say Backing up the server, there may be lag \n"
@@ -56,7 +57,7 @@ function netSync {
   rsync -azP ~/backups/ rsync://10.0.1.115/array1_backups/HCBackup
   if [[ "$?" != 0 ]]; then
     echo "Sync failed, NAS down?"
-  else 
+  else
     echo "Sync Complete!"
   fi
 }
@@ -68,7 +69,7 @@ function main {
   elif [ "$1" = delete ]; then
     remOld
   elif [ "$1" = sync ]; then
-    netsync
+    netSync
   else
     backup
     remOld

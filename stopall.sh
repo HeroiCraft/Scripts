@@ -5,24 +5,27 @@ reason="Get to a safe place, and prepare for the server to stop!"
 if [[ -n $msg ]]; then
   reason="$msg"
 fi
+if [[ $msg == '-f' ]]; then
+  quick=true
+fi
 
 function stopall {
 echo "Exiting with reason: '$reason' in 5 seconds..."
-sleep 5s
+qsleep 5s 0s
 nc -w15 -vz localhost 25566
 if [[ "$?" == "0" ]]; then
   echo "Stopping all servers!"
   # Warn the Players
-  screen -S mc_hub -X stuff 'sync console all title @a title [{"text":"Shutting down in 15 seconds!","color":"red","bold":"true"}] \n'
+  screen -S mc_hub -X stuff 'sync console all title @a title [{"text":"Shutting down soon!","color":"red","bold":"true"}] \n'
   screen -S mc_hub -X stuff "sync console all title @a subtitle [{'text':'$reason','color':'light_purple','italic':'true'}] \n"
-  sleep 15s
+  qsleep 15s 0s
   # Use the hub to stop all servers
   # If hub isn't up, this will fail horribly
   screen -S mc_hub -X stuff "sync console all save-all \n"
   screen -S mc_hub -X stuff "sync console all stop \n"
-  sleep 5s
+  qsleep 5s 1s
   screen -S mc_bungee -X stuff "end \n"
-  sleep 15s
+  qsleep 15s 10s
   for screen in $serverList
   do
     screen -S mc_$screen -X stuff "\n \n exit"
@@ -37,4 +40,15 @@ else
 fi
 }
 
+function qsleep {
+if [[ $quick == true ]]; then
+  echo "Replacing $1 sleep with $2 due to Quick Shutdown"
+  sleep $2
+else
+  sleep $1
+fi
+}
+
+
 stopall "$@"
+

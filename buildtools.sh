@@ -45,7 +45,7 @@ if [[ -e "spigot-*.jar" ]]; then
   echo "Removed old Jars"
 fi
 trap control_c SIGINT
-java -jar BuildTools.jar --rev "$rev"
+java -jar BuildTools.jar --rev "$rev" || control_c
 echo "Build Complete!"
 echo ""
 if [[ "$patchJar" == "true" ]]; then

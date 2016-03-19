@@ -23,9 +23,9 @@ if [[ "$?" == "0" ]]; then
   # If hub isn't up, this will fail horribly
   screen -S mc_hub -X stuff "sync console all save-all \n"
   screen -S mc_hub -X stuff "sync console all stop \n"
-  qsleep 5s 1s
+  waitForServerStop
   screen -S mc_bungee -X stuff "end \n"
-  qsleep 15s 10s
+  qsleep 10s 5s
   for screen in $serverList
   do
     screen -S mc_$screen -X stuff "\n \n exit"
@@ -49,6 +49,16 @@ else
 fi
 }
 
+function waitForServerStop {
+ps ax | grep "[j]ava -server .* spigot.jar"
+if [ $? -eq 0 ]; then
+  echo "Processes not stopped, retrying"
+  sleep 1s
+  waitForServerStop
+else
+  echo "Servers Stopped, continuing"
+fi
+}
 
 stopall "$@"
 

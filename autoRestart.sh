@@ -12,18 +12,18 @@ if [[ $runsLeft -le 0 ]]; then
   echo "10" > runsLeft.txt
   #./buildtools.sh
   cd ..
-  ./updateall.sh
+  scripts/updateall.sh
 else
   newRunsLeft="$(expr $runsLeft - 1)"
   echo "$newRunsLeft" > $HeroiCraftDIR/BuildTools/runsLeft.txt
   echo "There are $newRunsLeft runs until the next build of spigot"
-  $HeroiCraftDIR/updateall.sh -n
+  $HeroiCraftDIR/scripts/updateall.sh -n
 fi
 }
 
 function stopServers {
 cd $HeroiCraftDIR
-./stopall.sh
+scripts/stopall.sh $@
 }
 
 function startServers {

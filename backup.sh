@@ -4,7 +4,7 @@ bakDirs="$serverList" # Servers to backup
 bakDate="$(date +%m-%d-%Y_%I:%M%P)" # Current date of backup
 bakMain="$HOME/backups/HeroiCraft" # Where to put the backup folders
 bakOut="$bakMain/$bakDate" # Where to place the zipped files
-keepNum=48 # Number of backups to keep
+keepNum=24 # Number of backups to keep
 
 function backup {
   echo "Backing up $bakDirs..."
@@ -15,7 +15,9 @@ function backup {
   mysqldump -ubackupScript -p$bakPassword -C pex > $bakOut/pex.sql
   mysqldump -ubackupScript -p$bakPassword -C mc_geSuit > $bakOut/geSuit.sql
   mysqldump -ubackupScript -p$bakPassword -C mc_prism > $bakOut/prism.sql
+  mysqldump -ubackupScript -p$bakPassword -C mc_stats > $bakOut/stats.sql
   echo "Starting server backup"
+  sleep 2s
   for serverName in $bakDirs
   do
     echo "Backing up $serverName"

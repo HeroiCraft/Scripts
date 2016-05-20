@@ -36,12 +36,17 @@ function startServer {
 		rm plugins/CraftBukkitUpToDate/CraftBukkitUpToDate.sav
 		echo "Starting $serverName..."
 		echo
+    trap control_c SIGINT
 		java -server -Xmx"$mcRam"G \
       -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSIncrementalMode -XX:+CMSIncrementalPacing -XX:+CMSParallelRemarkEnabled -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+AggressiveOpts -XX:+UseFastAccessorMethods -XX:+UseBiasedLocking -XX:TargetSurvivorRatio=90 -Djava.net.preferIPv4Stack=true \
 		-jar spigot.jar --log-strip-color
 		echo
 		restart
 	fi
+}
+
+function control_c {
+echo "CTRL-C pressed, be careful!"
 }
 
 startServer $serverName

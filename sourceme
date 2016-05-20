@@ -16,7 +16,7 @@ export -f bgsc
 # Variables
 export serverList="bungee hub survival creative games skyblock"
 export HeroiCraftDIR="$HOME/HeroiCraft" && export mainDir="$HeroiCraftDIR" # Scripts use both
-export mcVer="1.8.8"
+export mcVer="1.9.2"
 export mcRam="3" #RAM in GB
 
 source $HeroiCraftDIR/scripts/private/privateSrc # Store passwords, etc in here to be ignored by git

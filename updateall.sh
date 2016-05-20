@@ -1,15 +1,17 @@
 #!/bin/bash
 source "$HOME/HeroiCraft/scripts/sourceme" || exit 4 # Exit if sourceme isn't found
 
-for server in $serverList
-do
-  cd "$HeroiCraftDIR/copyToAll"
-  if [[ $server != bungee ]]; then
-    cp -rfv * "$HeroiCraftDIR/$server"
+for server in $serverList; do
+  if [[ $server != bungee ]]
+  then
+    cp -arfv "$HeroiCraftDIR/copyToAll/." "$HeroiCraftDIR/$server"
   fi
+  rsync -ravz --update --existing $HeroiCraftDIR/copyToSome/plugins/ $HeroiCraftDIR/$server/plugins/
 done
 rm -rf "$HeroiCraftDIR/copyToAll/"
+rm -rf "$HeroiCraftDIR/copyToSome/"
 mkdir -p "$HeroiCraftDIR/copyToAll/plugins/"
+mkdir -p "$HeroiCraftDIR/copyToSome/plugins/"
 cd "$HeroiCraftDIR"
 
 if [[ "$@" != "-n" ]]; then
@@ -21,5 +23,5 @@ if [[ "$@" != "-n" ]]; then
 
   cd BuildTools
   wget -N -t 1 https://hub.spigotmc.org/jenkins/job/BuildTools/lastStableBuild/artifact/target/BuildTools.jar
-  ./buildtools.sh
+  $HeroiCraftDIR/scripts/buildtools.sh
 fi

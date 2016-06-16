@@ -26,7 +26,7 @@ function startServer {
 		cd "$HeroiCraftDIR/$serverName/"
     rm plugins/CommandSync/data.txt
 		echo "Starting $servernerName"
-		java -jar BungeeCord.jar -Xmx1G
+		java -jar bungeecord.jar -Xmx1G
 		echo
 		restart
 	else
@@ -39,7 +39,7 @@ function startServer {
     trap control_c SIGINT
 		java -server -Xmx"$mcRam"G \
       -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSIncrementalMode -XX:+CMSIncrementalPacing -XX:+CMSParallelRemarkEnabled -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+AggressiveOpts -XX:+UseFastAccessorMethods -XX:+UseBiasedLocking -XX:TargetSurvivorRatio=90 -Djava.net.preferIPv4Stack=true \
-		-jar spigot.jar --log-strip-color
+		-jar "$spigotType".jar --log-strip-color
 		echo
 		restart
 	fi

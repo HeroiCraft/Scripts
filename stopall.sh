@@ -12,12 +12,14 @@ fi
 function stopall {
 echo "Exiting with reason: '$reason' in 5 seconds..."
 qsleep 5s 0s
-nc -w15 -vz localhost 25566
+if [[ "$commandSendMode" == "commandsync" ]]; then
+  nc -w15 -vz localhost 25566
+fi
 if [[ "$?" == "0" ]]; then
   echo "Stopping all servers!"
   # Warn the Players
   screen -S mc_hub -X stuff 'sync console all title @a title [{"text":"Shutting down soon!","color":"red","bold":"true"}] \n'
-  screen -S mc_hub -X stuff 'sync console all title @a subtitle [{"text":"$reason","color":"light_purple","italic":"true"}] \n'
+  screen -S mc_hub -X stuff "sync console all title @a subtitle [{\"text\":\"$reason\",\"color\":\"light_purple\",\"italic\":\"true\"}] \n"
   qsleep 15s 0s
   ## Use the hub to stop all servers
   ## If hub isn't up, this will fail horribly
@@ -57,7 +59,6 @@ function waitForServerStop {
 ps ax | grep "[j]ava -server .* ${spigotType}.jar" >> /dev/null
 if [ $? -eq 0 ]; then
   echo "Processes not stopped, $(ps ax | grep "[j]ava -server .* ${spigotType}.jar" | wc -l) left"
-  
   sleep 1s
   waitForServerStop
 else

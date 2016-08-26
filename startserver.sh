@@ -25,8 +25,8 @@ function startServer {
 		xtitle "Minecraft Server: BungeeCord"
 		cd "$HeroiCraftDIR/$serverName/"
     rm plugins/CommandSync/data.txt
-		echo "Starting $servernerName"
-		java -jar bungeecord.jar -Xmx1G
+		echo "Starting $serverName"
+		java -jar "$bungeeType".jar -Xmx1G
 		echo
 		restart
 	else

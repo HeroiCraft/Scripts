@@ -37,7 +37,7 @@ while getopts :pnr: FLAG; do
       ;;
   esac
 done
-if [[ ! -e BuildTools.jar ]]; then
+if [[ ! -e "BuildTools.jar" ]]; then
   cd $mainDir/BuildTools
 fi
 if [[ -e "spigot-*.jar" ]]; then

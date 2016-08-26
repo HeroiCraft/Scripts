@@ -1,9 +1,10 @@
 #!/bin/bash
 
-# Options
+# Script Options
 export no_window=true
-export spigotType="spigot" # Bukkit, Spigot, or Paper
-export bungeeType="bungeecord" # bungeecord or waterfall
+export spigotType="paper" # Bukkit, Spigot, or Paper
+export bungeeType="waterfall" # bungeecord or waterfall
+export commandSendMode="screen" #Stop by recursive 'screen', or by hub 'commandsync'
 
 # Functions
 function bgsc { # Start screen session in background if it doesn't exist
@@ -18,7 +19,7 @@ export -f bgsc
 # Variables
 export serverList="bungee hub survival creative games skyblock"
 export HeroiCraftDIR="$HOME/HeroiCraft" && export mainDir="$HeroiCraftDIR" # Scripts use both
-export mcVer="1.9.4"
+export mcVer="1.10"
 export mcRam="3" #RAM in GB
 
 source $HeroiCraftDIR/scripts/private/privateSrc # Store passwords, etc in here to be ignored by git

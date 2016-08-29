@@ -108,7 +108,7 @@ function main {
     backup
     remOld
     nasSync &
-    if [ `date +%H` -ge 22 && `date +%H` -le 03 ]; then
+    if [ `date +%H` -ge 22 ] && [ `date +%H` -le 03 ]; then
       echo "Between 10pm and 2am, syncing to remote"
       #Thanks http://unix.stackexchange.com/q/63636/126262
       netSync

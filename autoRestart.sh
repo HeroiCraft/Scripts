@@ -32,7 +32,7 @@ cd $HOME
 }
 
 function main {
-stopServers
+stopServers "$@"
 tryBuild
 if [[ "$@" == "--no-start" ]]; then
   echo ""

@@ -1,7 +1,7 @@
 #!/bin/bash
 source "$HOME/HeroiCraft/scripts/sourceme" || exit 4 # Exit if sourceme isn't found
 bakDirs="$serverList" # Servers to backup
-bakDate="$(date +%m-%d-%Y_%I:%M%P)" # Current date of backup
+bakDate="$(date -Iseconds)" # Current date of backup
 bakMain="$HOME/backups/HeroiCraft" # Where to put the backup folders
 bakOut="$bakMain/$bakDate" # Where to place the zipped files
 keepNum=24 # Number of backups to keep
@@ -12,10 +12,12 @@ function backup {
   mkdir -p "$bakOut"
 
   echo "Backing up MySQL Databases"
+  mysqldump -ubackupScript -p$bakPassword -C mc_luckperms > $bakOut/luckperms.sql
   mysqldump -ubackupScript -p$bakPassword -C pex > $bakOut/pex.sql
   mysqldump -ubackupScript -p$bakPassword -C mc_geSuit > $bakOut/geSuit.sql
   mysqldump -ubackupScript -p$bakPassword -C mc_stats > $bakOut/stats.sql
-  mysqldump -ubackupScript -p$bakPassword -C mc_prism > $bakOut/prism.sql
+  mysqldump -ubackupScript -p$bakPassword -C mc_prism | gzip -c --rsyncable > $bakOut/prism.sql.gz
+  mysqldump -ubackupScript -p$bakPassword -C mc_venturechat | gzip -c --rsyncable $bakOut/venturechat.sql.gz
   echo "Starting server backup"
   sleep 2s
   for serverName in $bakDirs; do
@@ -29,6 +31,7 @@ function backup {
       fi
     fi
     lrztar -O $bakOut/ $serverName
+    #GZIP="--rsyncable --best" tar -jcvf "$bakOut/${serverName}.tar.bz2" "$serverName"
     if [ "$serverName" != bungee ]; then
       if screen -list | grep -q "mc_$serverName"; then
         screen -S mc_$serverName -X stuff "save-on \n"
@@ -58,7 +61,7 @@ function remOld {
 
 function b2Sync {
   echo "B2: Starting Backblaze B2 sync"
-  b2 sync --skipNewer "~/backups/recent" "b2://HeroiCraft-Backups/backups/recent" && echo "B2: Sync completed!"
+  rclone --transfers 32 sync "~/backups/recent" "b2:HeroiCraft-Backups/backups/recent"
 }
 
 function nasSync {
@@ -81,18 +84,18 @@ function megaSync {
 function amznSync {
   echo "AMZN: Starting Amazon Cloud Drive Sync"
   acdcli ul -dr 4 "$(readlink -f ~/backups/recent)" Backups/HeroiCraft && echo "AMZN: Sync Completed"
-} 
+}
 
 function driveSync {
-  rclone copy ~/backups HCBackup-SchoolDrive-Crypt:
+    rclone copy -vv ~/backups SGDBackups:HCBackup
 }
 
 function netSync {
-  nasSync
-  driveSync
-  amznSync
-  megaSync
-  b2Sync
+  #nasSync
+  driveSync # Unlimited Storage, bandwidth
+  #amznSync # Unlimited Storage, bandwidth
+  megaSync # 50gb storage, ?? banwidth
+  b2Sync # 10gb storage, unlimited upload, 10gb/day dl
 }
 
 function main {
@@ -107,7 +110,6 @@ function main {
   else
     backup
     remOld
-    nasSync &
     if [ `date +%H` -ge 22 ] && [ `date +%H` -le 03 ]; then
       echo "Between 10pm and 2am, syncing to remote"
       #Thanks http://unix.stackexchange.com/q/63636/126262

@@ -1,6 +1,8 @@
 #!/bin/bash
 source "$HOME/HeroiCraft/scripts/sourceme" || exit 4 # Exit if sourceme isn't found
 
+echo "Pass the -u argument to update spigot / bungee / waterfall / paper"
+
 function main {
 for server in $serverList; do
   echo "Updating $server"
@@ -15,7 +17,7 @@ mkdir -p "$HeroiCraftDIR/copyToAll/plugins/"
 mkdir -p "$HeroiCraftDIR/copyToSome/plugins/"
 cd "$HeroiCraftDIR"
 
-if [[ "$@" != "-n" ]]; then
+if [[ "$@" == "-u" ]]; then
   echo "Updating all Servers to latest version..."
   updateBungee
   updateSpigot
@@ -26,7 +28,7 @@ function updateBungee {
   echo "Updating $bungeeType"
   cd "$HeroiCraftDIR/bungee"
   if [[ "$bungeeType" == "waterfall" ]]; then
-    wget -N -t 1 https://ci.aquifermc.org/job/Waterfall/lastStableBuild/artifact/Waterfall-Proxy/bootstrap/target/Waterfall.jar -O waterfall.jar
+    wget -N -t 1 "https://papermc.io/ci/job/Waterfall/lastStableBuild/artifact/Waterfall-Proxy/bootstrap/target/Waterfall.jar" -O waterfall.jar
   elif [[ "$bungeeType" == "bungeecord" ]]; then
     wget -N -t 1 http://ci.md-5.net/job/BungeeCord/lastStableBuild/artifact/bootstrap/target/BungeeCord.jar -O bungeecord.jar
   else
